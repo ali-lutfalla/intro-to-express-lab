@@ -42,8 +42,8 @@ const shoes = [
 
 app.get('/shoes',(req, res) => {
     let printArray = shoes;
-    let minPrice = undefined;
-    let maxPrice = undefined;
+    let minPrice;
+    let maxPrice;
     let type;
     if (Object.keys(req.query).length === 0) {
         res.send(shoes);
@@ -51,29 +51,24 @@ app.get('/shoes',(req, res) => {
     for (const [key, value] of Object.entries(req.query)) {
         if (key === 'min-price'){
              minPrice = parseInt(value);
+             printArray = printArray.filter((element) => {
+                return element.price > minPrice;
+             });
         } 
         if (key === 'max-price'){
              maxPrice = parseInt(value);
+             printArray = printArray.filter((element) => {
+                return element.price < maxPrice;
+             });
         }
         if (key === 'type'){
              type = req.query.type;
+             printArray = printArray.filter((element) => {
+                return element.type === type;
+             });
         }
       }
-    if (minPrice !== undefined){
-        printArray = printArray.filter((element) => {
-            return element.price > minPrice;
-        });
-    }
-    if (maxPrice !== undefined){
-        printArray = printArray.filter((element) => {
-            return element.price < maxPrice;
-        });
-    }
-    if (type !== undefined){
-        printArray = printArray.filter((element) => {
-            return element.type === type;
-        });
-    }
+    
     res.send(printArray);
 })
 
